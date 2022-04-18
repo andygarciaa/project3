@@ -5,7 +5,7 @@ to integrate the two libraries.
 
 ## How to Build and Run
 1. Download SFML-2.5.1 from the link above and extract in root folder (i.e. C:\) of your desktop
-2. Downloaad and extract this repo 
+2. Download and extract this repo 
 3. Open the solution in this repo in Visual Studio 2019 as a project
 4. In solution explorer, right click the ImGui folder and click include in project if it isn't already
 5. Right click SFML tab in solution explorer and open properties page
