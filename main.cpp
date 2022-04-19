@@ -126,7 +126,7 @@ int main()
             // attr(string) accepts any defined function from Python file along with paramaters 
             py::object result = testermod.attr("add")(25, 4); 
             int test = (result.cast<int>());
-
+            ImGui::SetWindowSize(ImVec2((float)ImGuiWidth, (float)ImGuiHeight));
             ImGui::Begin("Results");
             ImGui::Text("You called the add function in Python! add(25,4) is ");
             ImGui::Text("%d", test);
