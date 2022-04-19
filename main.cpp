@@ -1,30 +1,74 @@
 /* Jocelyn Dzuong - Project 3
-GUI implementation using SFML and ImGui libraries*/
+GUI implementation using SFML and ImGui libraries
+*/
 
-#include <SFML/Graphics.hpp>
+// Turn off debug dependencies when importing Python modules 
+#ifdef _DEBUG
+#undef _DEBUG
+#include <Python.h>
+#define _DEBUG
+#else
+#include <Python.h>
+#endif
+
+// Include ImGui headers 
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "imstb_textedit.h"
 #include "imstb_truetype.h"
-#include <stdio.h>
-#include <iostream>
+
+// Include SFML headers
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
+
+// Include pybind11 headers to integrate Python with C++
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
+
+// Other necessary STL headers 
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+
 using namespace std;
 
+// Alias py for calling functions from pybind11
+namespace py = pybind11; 
+
+// Driver function handling window event of ImGui-SFML
 int main()
 {
+    // Declare a Python interpreter to use in program
+    py::scoped_interpreter guard{};
+
+    // Import custom Python file with defined functions in solution directory
+    py::module testermod = py::module::import("hehehe");
+
+    // Start the active window in ImGui + SFML with size and title of window 
     sf::RenderWindow window(sf::VideoMode(900,900), "Shopping Bot");
-    char userinput[255] = "Type here";
     ImGui::SFML::Init(window);
+
+    // Variables for text input, ImGui size dimenions, window clocks, and if buttons were clicked
+    char userinput[255] = "Type here";
     float ImGuiWidth, ImGuiHeight;
     ImGuiWidth = 800;
     ImGuiHeight = 800;
     sf::Clock deltaClock;
+    static bool searchClicked = false;
+
+    // Variables for ratings, checkbox filters, and array of floats for graph 
+    int minRating;
+    int maxRating;
+    bool showShirts = true, showPants = true, showShoes = true, showAll = true;
+    const float my_values[] = { 4,2,3,4,2 };
+
     while (window.isOpen())
     {
+        // Creates object for active window event and using deltaClock for upkeep of ImGui instance
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -34,18 +78,20 @@ int main()
             }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
+
+        // Sets ImGui window size
         ImGui::SetWindowSize(ImVec2((float)ImGuiWidth, (float)ImGuiHeight));
+
+        // ImGui window title, search input, and sliders for minimum and maximum rating
         ImGui::Begin("Find the best deals and prices here!");
         ImGui::Text("Search");
         ImGui::InputText("Term", userinput, 255);
-        int minRating; 
-        int maxRating;
         ImGui::Text("Minimum Rating\n");
         ImGui::SliderInt("Min", &minRating, 0,5);
         ImGui::Text("Maximum Rating\n");
         ImGui::SliderInt("Max", &maxRating, 0,5);
-        bool showShirts, showPants, showShoes, showAll;
 
+        // Checkbox filters for types of clothing to look up 
         ImGui::NewLine();
         ImGui::Text("Item Filters");
         ImGui::Checkbox("Shirts", &showShirts);
@@ -55,20 +101,44 @@ int main()
         ImGui::Checkbox("Shoes", &showShoes);
         ImGui::SameLine();
         ImGui::Checkbox("Show all", &showAll);
-        //ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
-        const float my_values[] = { 4,2,3,4,2 };
+
+        // Graph for testing, parses array of floats. Here by default but subject to change 
         ImGui::PlotLines("Price Change Test\n", my_values, IM_ARRAYSIZE(my_values));
+
+        // If search button is clicked, sets bool to true and runs python function
         if (ImGui::Button("Search"))
         {
-            // do stuff
+            searchClicked = true;
         }
         ImGui::End();
-        //shape.setRadius(circleRadius);
+
+        /* 
+        Runs when search button is clicked
+        Calls a function from custom Python file, casts it into appropriate variable type, and prints results
+        on a new window in ImGui
+        All ImGui window instances must always begin with ImGui::Begin(string title) and end with ImGui::End()!!! 
+        */
+        if (searchClicked) {
+
+            // attr(string) accepts any defined function from Python file along with paramaters 
+            py::object result = testermod.attr("add")(25, 4); 
+            int test = (result.cast<int>());
+
+            ImGui::Begin("Results");
+            ImGui::Text("You called the add function in Python! add(25,4) is ");
+            ImGui::Text("%d", test);
+            ImGui::End();
+        }
+
+        // Sets background color using SFML
         window.clear(sf::Color(18,33,43));
 
+        // Draws ImGui::SFML window in a loop by frames and displays each time
         ImGui::SFML::Render(window);
         window.display();
     }
+
+    // Shuts down when close button is clicked on top to clear ImGui-SFML instances 
     ImGui::SFML::Shutdown();
     return 0;
 }
