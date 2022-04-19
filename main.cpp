@@ -46,6 +46,8 @@ int main()
     py::scoped_interpreter guard{};
 
     // Import custom Python file with defined functions in solution directory
+    // Will only accept custom  module names without .py extension!!! 
+    // Otherwise an error will be pulled
     py::module testermod = py::module::import("hehehe");
 
     // Start the active window in ImGui + SFML with size and title of window 
@@ -53,7 +55,7 @@ int main()
     ImGui::SFML::Init(window);
 
     // Variables for text input, ImGui size dimenions, window clocks, and if buttons were clicked
-    char userinput[255] = "Type here";
+    char userinput[255] = "Type here"; // Cannot be declared empty unfortunately
     float ImGuiWidth, ImGuiHeight;
     ImGuiWidth = 800;
     ImGuiHeight = 800;
@@ -110,6 +112,7 @@ int main()
         {
             searchClicked = true;
         }
+        // End of first ImGui instance with search UI
         ImGui::End();
 
         /* 
