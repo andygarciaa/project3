@@ -99,7 +99,7 @@ void CreateShirtHeap(WebNode* minHeap, AllWebsites* theList)
     AllWebsites* placeHolder = theList;
     while(placeHolder->headPointer != NULL) {
         WebNode newNode;
-        newNode.CreateNode(placeHolder->headPointer->shirtPrice, placeHolder->headPointer->name, "Shirt");
+        newNode.CreateNode(placeHolder->headPointer->price, placeHolder->headPointer->itemName, "Shirt");
         placeHolder->headPointer = placeHolder->headPointer->next;
     }
     minHeap.heapify(minHeap, minHeap.size(), 0);
@@ -110,7 +110,7 @@ void CreatePantsHeap(WebNode* minHeap, AllWebsites* theList)
     AllWebsites* placeHolder = theList;
     while(placeHolder->headPointer != NULL) {
         WebNode newNode;
-        newNode.CreateNode(placeHolder->headPointer->pantsPrice, placeHolder->headPointer->name, "Pants");
+        newNode.CreateNode(placeHolder->headPointer->price, placeHolder->headPointer->itemName, "Pants");
         placeHolder->headPointer = placeHolder->headPointer->next;
     }
     minHeap.heapify(minHeap, minHeap.size(), 0);
@@ -122,7 +122,7 @@ void CreateShoesHeap(WebNode* minHeap, AllWebsites* theList)
     AllWebsites* placeHolder = theList;
     while(placeHolder->headPointer != NULL) {
         WebNode newNode;
-        newNode.CreateNode(placeHolder->headPointer->shoesPrice, placeHolder->headPointer->name, "Shoes");
+        newNode.CreateNode(placeHolder->headPointer->price, placeHolder->headPointer->itemName, "Shoes");
         placeHolder->headPointer = placeHolder->headPointer->next;
     }
     minHeap.heapify(minHeap, minHeap.size(), 0);
