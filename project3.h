@@ -18,7 +18,6 @@ class AllWebsites
         double pantsPrice;
         double shoesPrice;
         double rating;
-        double priceOverTime;
         Website* next;
         Website()
         {
@@ -34,7 +33,7 @@ public:
     bool shirt, pants, shoes;
 
     void Filter(double minRating, double totalWebsites, bool shirt, bool pants, bool shoes);
-    void AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating, double priceOverTime);
+    void AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating);
     string printAllWebsitesLinkedList(AllWebsites* p);
 
 };
@@ -51,7 +50,7 @@ void AllWebsites::Filter(double minRating, double totalWebsites, bool shirt, boo
     tailPointer = nullptr;
 }
 
-void AllWebsites::AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating, double priceOverTime)
+void AllWebsites::AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating)
 {
 
     if (minRating <= rating) {
@@ -62,7 +61,6 @@ void AllWebsites::AddWebsite(string name, double shirtPrice, double pantsPrice, 
         newWebsite->pantsPrice = pantsPrice;
         newWebsite->shoesPrice = shoesPrice;
         newWebsite->rating = rating;
-        newWebsite->priceOverTime = priceOverTime;
         if (numOfWebsites == 0) {
             headPointer = newWebsite;
             tailPointer = newWebsite;
