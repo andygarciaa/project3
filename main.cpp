@@ -47,6 +47,8 @@ GUI implementation using SFML and ImGui libraries
 
 #include <iostream>
 
+#include <fstream> //This allows for the functions that read into the CSV file
+
 // Header files from Mark
 #include "minheap.h"
 
@@ -57,8 +59,104 @@ using namespace std;
 // Alias py for calling functions from pybind11
 namespace py = pybind11;
 
+//Function that reads data from the CSV File
+void GetDataFromCSVFile(string filePath, AllWebsites* theList)
+{
+    ifstream inFile(filePath);
+
+    if (inFile.is_open())
+    {
+        // 0. Read the heading data from the file
+        string lineFromFile;
+        getline(inFile, lineFromFile);
+
+        // Get all entries/records from the file, one line at a time
+        while (getline(inFile, lineFromFile))
+        {
+            // Create a stream from the line of data from the file
+            istringstream stream(lineFromFile);
+
+            string name;
+            string tempShirt;
+            double shirtPrice;
+            string tempPants;
+            double pantsPrice;
+            string tempShoes;
+            double shoesPrice;
+            string tempRating;
+            double rating;
+
+            string tempAge;
+            int age;
+
+            getline(stream, name, ',');
+            getline(stream, tempShirt, ',');
+            shirtPrice = stod(tempShirt);
+            getline(stream, tempPants, ',');
+            pantsPrice = stod(tempPants);
+            getline(stream, tempShoes, ',');
+            shoesPrice = stod(tempShoes);
+            getline(stream, tempRating);
+            rating = stod(tempRating);
+
+            theList.AddWebsite(name, shirtPrice, pantsPrice, shoesPrice, rating);
+        }
+    }
+}
+void CreateShirtHeap(WebNode* minHeap, AllWebsites* theList)
+{
+    AllWebsites* placeHolder = theList;
+    while(placeHolder->headPointer != NULL) {
+        WebNode newNode;
+        newNode.CreateNode(placeHolder->headPointer->shirtPrice, placeHolder->headPointer->name, "Shirt");
+        placeHolder->headPointer = placeHolder->headPointer->next;
+    }
+    minHeap.heapify(minHeap, minHeap.size(), 0);
+}
+
+void CreatePantsHeap(WebNode* minHeap, AllWebsites* theList)
+{
+    AllWebsites* placeHolder = theList;
+    while(placeHolder->headPointer != NULL) {
+        WebNode newNode;
+        newNode.CreateNode(placeHolder->headPointer->pantsPrice, placeHolder->headPointer->name, "Pants");
+        placeHolder->headPointer = placeHolder->headPointer->next;
+    }
+    minHeap.heapify(minHeap, minHeap.size(), 0);
+}
+
+
+void CreateShoesHeap(WebNode* minHeap, AllWebsites* theList)
+{
+    AllWebsites* placeHolder = theList;
+    while(placeHolder->headPointer != NULL) {
+        WebNode newNode;
+        newNode.CreateNode(placeHolder->headPointer->shoesPrice, placeHolder->headPointer->name, "Shoes");
+        placeHolder->headPointer = placeHolder->headPointer->next;
+    }
+    minHeap.heapify(minHeap, minHeap.size(), 0);
+}
+
 // Driver function handling window event of ImGui-SFML
 int main() {
+    AllWebsites theList;
+    //theList.Filter(minRating, totalWebsites, shirt, pants, shoes); this will be dependent on the user input from the GUI but it HAS to be called before collecting the data
+    //GetDataFromCSVFile("Name of file Here", theList);
+    /*=== Now create the minheap from the linked list ===*/
+    /*
+    if(shirtMinHeap == true) {
+        WebNode shirtHeap[totalWebsites];
+        CreateShirtHeap(shirtHeap);
+    }
+    if(pantsMinHeap == true) {
+        WebNode pantsHeap[totalWebsites];
+        CreatePantsHeap(pantsHeap);
+    }
+    if(shoesMinHeap == true) {
+        WebNode shoesHeap[totalWebsites];
+        CreateShoesHeap(shoesHeap);
+    }
+    */
     // Declare a Python interpreter to use in program
     py::scoped_interpreter guard{};
 
