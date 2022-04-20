@@ -76,30 +76,21 @@ void GetDataFromCSVFile(string filePath, AllWebsites* theList)
             // Create a stream from the line of data from the file
             istringstream stream(lineFromFile);
 
-            string name;
-            string tempShirt;
-            double shirtPrice;
-            string tempPants;
-            double pantsPrice;
-            string tempShoes;
-            double shoesPrice;
+            string itemName;
+            string tempPrice;
+            double price;
             string tempRating;
             double rating;
+            string theURL;
 
-            string tempAge;
-            int age;
-
-            getline(stream, name, ',');
-            getline(stream, tempShirt, ',');
-            shirtPrice = stod(tempShirt);
-            getline(stream, tempPants, ',');
-            pantsPrice = stod(tempPants);
-            getline(stream, tempShoes, ',');
-            shoesPrice = stod(tempShoes);
-            getline(stream, tempRating);
+            getline(stream, itemName, ',');
+            getline(stream, tempPrice, ',');
+            price = stod(tempPrice);
+            getline(stream, tempRating, ',');
             rating = stod(tempRating);
+            getline(stream, theURL);
 
-            theList.AddWebsite(name, shirtPrice, pantsPrice, shoesPrice, rating);
+            theList.AddWebsite(itemName, price, rating, theURL);
         }
     }
 }
@@ -144,15 +135,15 @@ int main() {
     //GetDataFromCSVFile("Name of file Here", theList);
     /*=== Now create the minheap from the linked list ===*/
     /*
-    if(shirtMinHeap == true) {
+    if(theList->shirt == true) {
         WebNode shirtHeap[theList->numOfWebsites];
         CreateShirtHeap(shirtHeap);
     }
-    if(pantsMinHeap == true) {
+    if(theList->pants == true) {
         WebNode pantsHeap[theList->numOfWebsites];
         CreatePantsHeap(pantsHeap);
     }
-    if(shoesMinHeap == true) {
+    if(theList->shoes == true) {
         WebNode shoesHeap[theList->numOfWebsites];
         CreateShoesHeap(shoesHeap);
     }
