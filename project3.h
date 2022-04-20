@@ -28,17 +28,16 @@ public:
     Website* headPointer;
     Website* tailPointer;
     int numOfWebsites;
-    int totalWebsites;
     double minRating;
     bool shirt, pants, shoes;
 
-    void Filter(double minRating, double totalWebsites, bool shirt, bool pants, bool shoes);
+    void Filter(double minRating, bool shirt, bool pants, bool shoes);
     void AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating);
     string printAllWebsitesLinkedList(AllWebsites* p);
 
 };
 
-void AllWebsites::Filter(double minRating, double totalWebsites, bool shirt, bool pants, bool shoes)
+void AllWebsites::Filter(double minRating, bool shirt, bool pants, bool shoes)
 {
     this->minRating = minRating;
     this->totalWebsites = totalWebsites;
