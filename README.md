@@ -5,6 +5,14 @@ to integrate the two libraries.
 
 ![Shopping Bot Gui](https://github.com/andygarciaa/project3/blob/main/guipreview.png)
 ## How to Build and Run
+
+#Installing Python backages
+1.Ensure Python is set correctly as a PATH environment variable
+2.Open CMD and run the following commands
+3."pip install BeautifulSoup4"
+4."pip install requests"
+
+#Installing SFML library
 1. Download SFML-2.5.1 from the link above and extract in root folder (i.e. C:\) of your desktop
 2. Download and extract this repo 
 3. Open the solution in this repo in Visual Studio 2019 as a project
