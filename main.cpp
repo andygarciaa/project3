@@ -4,44 +4,61 @@ GUI implementation using SFML and ImGui libraries
 
 // Turn off debug dependencies when importing Python modules 
 #ifdef _DEBUG
-#undef _DEBUG
-#include <Python.h>
+#undef _DEBUG#include <Python.h>
+
 #define _DEBUG
-#else
-#include <Python.h>
+#else#include <Python.h>
+
 #endif
 
 // Include ImGui headers 
 #include "imgui.h"
+
 #include "imgui-SFML.h"
+
 #include "imstb_textedit.h"
+
 #include "imstb_truetype.h"
+
+#include "imgui_stdlib.h"
 
 // Include SFML headers
 #include <SFML/Graphics/CircleShape.hpp>
+
 #include <SFML/Graphics.hpp>
+
 #include <SFML/Graphics/RenderWindow.hpp>
+
 #include <SFML/System/Clock.hpp>
+
 #include <SFML/Window/Event.hpp>
 
 // Include pybind11 headers to integrate Python with C++
 #include <pybind11/pybind11.h>
+
 #include <pybind11/embed.h>
 
 // Other necessary STL headers 
 #include <string.h>
+
 #include <stdlib.h>
+
 #include <stdio.h>
+
 #include <iostream>
+
+// Header files from Mark
+#include "minheap.h"
+
+#include "project3.h"
 
 using namespace std;
 
 // Alias py for calling functions from pybind11
-namespace py = pybind11; 
+namespace py = pybind11;
 
 // Driver function handling window event of ImGui-SFML
-int main()
-{
+int main() {
     // Declare a Python interpreter to use in program
     py::scoped_interpreter guard{};
 
@@ -51,7 +68,7 @@ int main()
     py::module testermod = py::module::import("hehehe");
 
     // Start the active window in ImGui + SFML with size and title of window 
-    sf::RenderWindow window(sf::VideoMode(900,900), "Shopping Bot");
+    sf::RenderWindow window(sf::VideoMode(900, 900), "Shopping Bot");
     ImGui::SFML::Init(window);
 
     // Variables for text input, ImGui size dimenions, window clocks, and if buttons were clicked
@@ -61,19 +78,25 @@ int main()
     ImGuiHeight = 800;
     sf::Clock deltaClock;
     static bool searchClicked = false;
+    static bool minHeapClicked = false;
+    static bool linkedListClicked = false;
 
     // Variables for ratings, checkbox filters, and array of floats for graph 
     int minRating;
     int maxRating;
-    bool showShirts = true, showPants = true, showShoes = true, showAll = true;
-    const float my_values[] = { 4,2,3,4,2 };
+    bool showShirts, showPants, showShoes, showAll;
+    const float my_values[] = {
+      4,
+      2,
+      3,
+      4,
+      2
+    };
 
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         // Creates object for active window event and using deltaClock for upkeep of ImGui instance
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             ImGui::SFML::ProcessEvent(event);
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -89,9 +112,9 @@ int main()
         ImGui::Text("Search");
         ImGui::InputText("Term", userinput, 255);
         ImGui::Text("Minimum Rating\n");
-        ImGui::SliderInt("Min", &minRating, 0,5);
+        ImGui::SliderInt("Min", &minRating, 0, 5);
         ImGui::Text("Maximum Rating\n");
-        ImGui::SliderInt("Max", &maxRating, 0,5);
+        ImGui::SliderInt("Max", &maxRating, 0, 5);
 
         // Checkbox filters for types of clothing to look up 
         ImGui::NewLine();
@@ -108,33 +131,79 @@ int main()
         ImGui::PlotLines("Price Change Test\n", my_values, IM_ARRAYSIZE(my_values));
 
         // If search button is clicked, sets bool to true and runs python function
-        if (ImGui::Button("Search"))
-        {
+        if (ImGui::Button("Search")) {
             searchClicked = true;
         }
         // End of first ImGui instance with search UI
         ImGui::End();
 
-        /* 
+        /*
         Runs when search button is clicked
         Calls a function from custom Python file, casts it into appropriate variable type, and prints results
         on a new window in ImGui
-        All ImGui window instances must always begin with ImGui::Begin(string title) and end with ImGui::End()!!! 
+        All ImGui window instances must always begin with ImGui::Begin(string title) and end with ImGui::End()!!!
         */
         if (searchClicked) {
 
             // attr(string) accepts any defined function from Python file along with paramaters 
-            py::object result = testermod.attr("add")(25, 4); 
-            int test = (result.cast<int>());
+            py::object result = testermod.attr("add")(25, 4);
+            int test = (result.cast < int >());
+
+            // Begins a new popup window with results
             ImGui::SetWindowSize(ImVec2((float)ImGuiWidth, (float)ImGuiHeight));
             ImGui::Begin("Results");
             ImGui::Text("You called the add function in Python! add(25,4) is ");
             ImGui::Text("%d", test);
+
+            // Two buttons to show results in min heap and linked list 
+            // windows handled after ImGui::End() of this current results window 
+            if (ImGui::Button("Show in Min Heap")) {
+                minHeapClicked = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Show in Linked List")) {
+                linkedListClicked = true;
+            }
             ImGui::End();
         }
+        // Tests Linked List implementation
+        if (linkedListClicked) {
+            ImGui::SetWindowSize(ImVec2((float)ImGuiWidth * 7, (float)ImGuiHeight * 7));
+            ImGui::Begin("Linked List");
+            AllWebsites testCollectionOfWebsites;
+            testCollectionOfWebsites.Filter(1, 3, true, true, true);
+            testCollectionOfWebsites.AddWebsite("Adidas", 2.00, 5.00, 3.00, 1, 2);
+            testCollectionOfWebsites.AddWebsite("Amazon", 1, 3, 3, 1, 5);
+            testCollectionOfWebsites.AddWebsite("Shein", 4, 7, 4, 1, 1);
 
+            string llresults = testCollectionOfWebsites.printAllWebsitesLinkedList(&testCollectionOfWebsites);
+            const char* convertresults = llresults.c_str();
+            ImGui::Text(convertresults);
+            //ImGui::Text("");
+            ImGui::End();
+        }
+        if (minHeapClicked) {
+            ImGui::SetWindowSize(ImVec2((float)ImGuiWidth * 7, (float)ImGuiHeight * 7));
+            ImGui::Begin("Min Heap");
+            WebNode collectionOfWebsites[2];
+            WebNode nodeOne;
+            WebNode nodeTwo;
+            nodeOne.CreateNode(2, "Adidas", "sneakers");
+            nodeTwo.CreateNode(3, "Amazon", "shorts");
+            collectionOfWebsites[0] = nodeOne;
+            collectionOfWebsites[1] = nodeTwo;
+            heapify(collectionOfWebsites, 2, 0);
+            string minimumPrice = to_string(returnMin(collectionOfWebsites).getPrice());
+            ImGui::Text("You added Adidas sneakers worth $2 and Amazon shorts worth $3");
+            ImGui::NewLine();
+            ImGui::Text("The minimum price using minheap is ");
+            const char* convertMinPrice = minimumPrice.c_str();
+            ImGui::Text(convertMinPrice);
+            ImGui::End();
+
+        }
         // Sets background color using SFML
-        window.clear(sf::Color(18,33,43));
+        window.clear(sf::Color(18, 33, 43));
 
         // Draws ImGui::SFML window in a loop by frames and displays each time
         ImGui::SFML::Render(window);
