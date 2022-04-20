@@ -140,20 +140,20 @@ void CreateShoesHeap(WebNode* minHeap, AllWebsites* theList)
 // Driver function handling window event of ImGui-SFML
 int main() {
     AllWebsites theList;
-    //theList.Filter(minRating, totalWebsites, shirt, pants, shoes); this will be dependent on the user input from the GUI but it HAS to be called before collecting the data
+    //theList.Filter(minRating, shirt, pants, shoes); this will be dependent on the user input from the GUI but it HAS to be called before collecting the data
     //GetDataFromCSVFile("Name of file Here", theList);
     /*=== Now create the minheap from the linked list ===*/
     /*
     if(shirtMinHeap == true) {
-        WebNode shirtHeap[totalWebsites];
+        WebNode shirtHeap[theList->numOfWebsites];
         CreateShirtHeap(shirtHeap);
     }
     if(pantsMinHeap == true) {
-        WebNode pantsHeap[totalWebsites];
+        WebNode pantsHeap[theList->numOfWebsites];
         CreatePantsHeap(pantsHeap);
     }
     if(shoesMinHeap == true) {
-        WebNode shoesHeap[totalWebsites];
+        WebNode shoesHeap[theList->numOfWebsites];
         CreateShoesHeap(shoesHeap);
     }
     */
