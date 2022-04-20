@@ -40,7 +40,6 @@ public:
 void AllWebsites::Filter(double minRating, bool shirt, bool pants, bool shoes)
 {
     this->minRating = minRating;
-    this->totalWebsites = totalWebsites;
     this->shirt = shirt;
     this->pants = pants;
     this->shoes = shoes;
