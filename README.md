@@ -3,6 +3,7 @@ A bot built using C++ that finds the lowest prices for various clothes (currentl
 [ImGui](https://github.com/ocornut/imgui), [SFML](https://www.sfml-dev.org/download.php), and [ImGui-SFML](https://github.com/eliasdaler/imgui-sfml)
 to integrate the two libraries.
 
+![Shopping Bot Gui](https://github.com/andygarciaa/project3/blob/main/guipreview.png)
 ## How to Build and Run
 1. Download SFML-2.5.1 from the link above and extract in root folder (i.e. C:\) of your desktop
 2. Download and extract this repo 
