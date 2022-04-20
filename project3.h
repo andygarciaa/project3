@@ -13,11 +13,10 @@ class AllWebsites
 {
     struct Website {
     public:
-        string name;
-        double shirtPrice;
-        double pantsPrice;
-        double shoesPrice;
+        string itemName;
+        double price;
         double rating;
+        string theURL;
         Website* next;
         Website()
         {
@@ -32,7 +31,7 @@ public:
     bool shirt, pants, shoes;
 
     void Filter(double minRating, bool shirt, bool pants, bool shoes);
-    void AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating);
+    void AddWebsite(string itemName, double price, double rating, string theURL);
     string printAllWebsitesLinkedList(AllWebsites* p);
 
 };
@@ -48,17 +47,16 @@ void AllWebsites::Filter(double minRating, bool shirt, bool pants, bool shoes)
     tailPointer = nullptr;
 }
 
-void AllWebsites::AddWebsite(string name, double shirtPrice, double pantsPrice, double shoesPrice, double rating)
+void AllWebsites::AddWebsite(string itemName, double price, double rating, string theURL)
 {
 
     if (minRating <= rating) {
         Website* newWebsite = new Website();
 
-        newWebsite->name = name;
-        newWebsite->shirtPrice = shirtPrice;
-        newWebsite->pantsPrice = pantsPrice;
-        newWebsite->shoesPrice = shoesPrice;
+        newWebsite->itemName = itemName;
+        newWebsite->price = price;
         newWebsite->rating = rating;
+        newWebsite->theURL = theURL;
         if (numOfWebsites == 0) {
             headPointer = newWebsite;
             tailPointer = newWebsite;
